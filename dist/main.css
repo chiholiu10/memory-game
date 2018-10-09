@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; }
+  body .memory-game {
+    width: 100%;
+    border: 1px solid red; }
+    body .memory-game .memory-card {
+      width: 20%;
+      float: left;
+      height: 20%;
+      border: 1px solid red; }
+
