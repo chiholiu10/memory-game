@@ -6,8 +6,8 @@
         let newArray;
         let memoryGame = document.getElementById('memory-game');
         let amountOfCards = 20;
-        let memoryBlock = "";
         let play = document.getElementById('play');
+        let flipCards = 0;
 
         this.init = function() {
            addEventListener();
@@ -15,26 +15,27 @@
 
         let addEventListener = function() {
             play.addEventListener('mouseup', showCards);
+            document.addEventListener('mouseup', flipCard);
         }
 
         let showCards = function() {
             doubleArray(array, array);  
-            triggerCall();
-            flipCard();
+            triggerClick();
         }
-
+        
         let triggerFirstClick = function() {
             let click = 0;
+  
             return function() {
                 if(click === 0) {
-                    play.textContent = "Restart";
+                     play.textContent = "Restart";
                 }
                 click++;
             }
         }
-
-        let triggerCall = triggerFirstClick();
-
+        
+        let triggerClick = triggerFirstClick(); 
+ 
         let doubleArray = function(firstArr, secondArr) {
             let firstArray = firstArr;
             let secondArray = secondArr;
@@ -42,7 +43,23 @@
             shuffle(newArray);
         }
 
+        let countFlipCards = function(name) {
+            flipCards++;  
+            if((flipCards % 2) === 0) {
+                console.log(name);
+            }  
+        }
+            
+        let flipCard = function(e) {
+            if(e.target && e.target.className === 'memory-card') {
+                let cardName = e.target.innerText;
+                countFlipCards(cardName);
+            }
+        }
+
+
         let shuffledArray = function(array) {
+            let memoryBlock = "";
             if(memoryBlock === undefined) return;
 
             for(let i = 0; i < array.length; i++) {
@@ -51,15 +68,12 @@
             checkMemoryGame(memoryGame.childNodes.length, memoryBlock);
         }
         
-        let checkMemoryGame = function(arrayLength, memoryBlock) {
+        let checkMemoryGame = function(getArray, memoryBlock) {
             let addNew = memoryGame.innerHTML += memoryBlock;
             let resetGame = memoryGame.innerHTML = memoryBlock;
+            let arrayLength = getArray;
             
             arrayLength < amountOfCards ? addNew : resetGame;
-        }
-
-        let restartGame = function() {
-            console.log('time to restart the game');
         }
 
         let shuffle = function(array) {
@@ -78,14 +92,6 @@
             shuffledArray(array);
             return array;
         }
-
-        let flipCard = function() {
-            for(let i = 0; i < memoryBlock.length; i++) {
-                
-            }
-            console.log(memoryBlock);
-        }
-
     }
 
     let memoryGame = new MemoryGame();
