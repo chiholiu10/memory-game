@@ -8,6 +8,8 @@
         let amountOfCards = 20;
         let play = document.getElementById('play');
         let flipCards = 0;
+        let temporaryArray = [];
+        let points = 0;
 
         this.init = function() {
            addEventListener();
@@ -25,7 +27,7 @@
         
         let triggerFirstClick = function() {
             let click = 0;
-  
+    
             return function() {
                 if(click === 0) {
                      play.textContent = "Restart";
@@ -44,10 +46,29 @@
         }
 
         let countFlipCards = function(name) {
+            temporaryArray.push(name);
             flipCards++;  
             if((flipCards % 2) === 0) {
-                console.log(name);
+                checkCard();
             }  
+        }
+
+        let checkCard = function() {
+            let checkCardMatch = temporaryArray.every((val, i, arr) => val === arr[0]);
+            let addPoints = +20;
+            let removePoints = -10;
+
+            checkCardMatch == true ? assignPoints(addPoints) : assignPoints(removePoints);
+            emptyArray();
+        }
+
+        let assignPoints = function(assignPoints) {
+            points += assignPoints;
+            console.log(points);
+        }
+
+        let emptyArray = function() {
+            temporaryArray = [];
         }
             
         let flipCard = function(e) {
