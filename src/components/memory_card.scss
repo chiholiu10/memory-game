@@ -5,13 +5,42 @@ body {
     overflow-x: hidden;
     .memory-card {
         width: 20%;
-        float: left;
+        border: 1px solid black;
+        // float: left;
+        display: inline-block;
+        margin-left: 50px;
+        margin-right: 50px;
         height: 100px;
         transition: 0.6s;
 	    transform-style: preserve-3d;
         position: relative;
+        &.hover {
+            transform: rotateY(180deg);
+        }
         .flip-card {
             transform: rotate(180deg);
+        }
+        .front, .back {
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -o-backface-visibility: hidden;
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .front {
+            z-index: 2;
+        }
+        .back {
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+            -o-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+            background: #f8f8f8;
+        }
+        .front {
+            z-index: 2;
         }
     }
 }

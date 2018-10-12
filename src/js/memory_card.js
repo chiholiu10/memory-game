@@ -10,6 +10,7 @@
         let flipCards = 0;
         let temporaryArray = [];
         let points = 0;
+        let getId;
 
         this.init = function() {
            addEventListener();
@@ -45,8 +46,11 @@
             shuffle(newArray);
         }
 
-        let countFlipCards = function(name) {
-            temporaryArray.push(name);
+        let countFlipCards = function(name, id) {
+            temporaryArray.push({
+                'name': name,
+                'id': id
+            });
             flipCards++;  
             if((flipCards % 2) === 0) {
                 checkCard();
@@ -54,17 +58,39 @@
         }
 
         let checkCard = function() {
-            let checkCardMatch = temporaryArray.every((val, i, arr) => val === arr[0]);
+
+            let checkCardMatch = temporaryArray.every((val, i, arr) => val.name === arr[0].name);
+            console.log(checkCardMatch);
             let addPoints = +20;
             let removePoints = -10;
+            checkCardMatch == true ? assignPoints(addPoints, true) : assignPoints(removePoints, false);
+        }
 
-            checkCardMatch == true ? assignPoints(addPoints) : assignPoints(removePoints);
+        let assignPoints = function(assignPoints, stayFlipped) {
+            points += assignPoints;
+            if(stayFlipped) {
+                return;
+            } else {
+                undoFlip();
+            }
             emptyArray();
         }
 
-        let assignPoints = function(assignPoints) {
-            points += assignPoints;
-            console.log(points);
+        let undoFlip = function() {
+            for(let i = 0; i < temporaryArray.length; i++) {
+                findCard(temporaryArray[i].id);
+            }
+        }
+
+        let findCard = function(element) {
+            let memoryCards = document.querySelectorAll('.memory-card');
+            for(let i = 0; i < memoryCards.length; i++) {
+                if(memoryCards[i].id == element) {
+                    setTimeout(function () {
+                    memoryCards[i].classList.remove('hover');
+                    }, 2000);
+                }
+            }
         }
 
         let emptyArray = function() {
@@ -72,19 +98,21 @@
         }
             
         let flipCard = function(e) {
-            if(e.target && e.target.className === 'memory-card') {
+            let flippedCards = document.querySelectorAll('.hover').length;
+            if(e.target && e.target.className === 'memory-card' && flippedCards < 2) {
                 let cardName = e.target.innerText;
-                countFlipCards(cardName);
+                getId = e.target.getAttribute('id');
+                e.target.classList.add('hover');
+                countFlipCards(cardName, getId);
             }
         }
-
-
+        
         let shuffledArray = function(array) {
             let memoryBlock = "";
             if(memoryBlock === undefined) return;
 
             for(let i = 0; i < array.length; i++) {
-                memoryBlock += '<div class="memory-card">' + array[i] + '</div>';
+                memoryBlock += '<div class="memory-card" id="'+ i + '"><div class="front"></div><div class="back">' + array[i] + '</div></div>';
             }       
             checkMemoryGame(memoryGame.childNodes.length, memoryBlock);
         }
@@ -98,7 +126,6 @@
         }
 
         let shuffle = function(array) {
-          
             let currentIndex = array.length, temporaryValue, randomIndex;
 
             while (0 !== currentIndex) {
