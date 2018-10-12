@@ -2,9 +2,9 @@
     "use strict";
 
     function MemoryGame() {
-        let array = ['Mario', 'Luigi', 'Browser', 'Princess Peach', 'Wario', 'Toad', 'Yoshi', 'Bowser Junior', 'Waluigi', 'Diddy Kong' ]
-        let newArray;
+        let array = ['mario', 'luigi', 'browser', 'peach', 'wario', 'toad', 'yoshi', 'bowser-junior', 'waluigi', 'diddy-kong-jr' ]
         let memoryGame = document.getElementById('memory-game');
+        let counterClicks;
         let amountOfCards = 20;
         let play = document.getElementById('play');
         let flipCards = 0;
@@ -13,7 +13,6 @@
         let getId;
         let counter = 0;
         let timer;
-        let counterClicks;
 
         this.init = function() {
            addEventListener();
@@ -28,6 +27,12 @@
             doubleArray(array, array);  
             triggerClick();
             clearInterval(timer);
+            showScoreBoard();
+        }
+
+        let showScoreBoard = function() {
+            let scoreBoard = document.getElementById('score');
+            scoreBoard.classList.add('display-block');
         }
         
         let triggerFirstClick = function() {
@@ -46,7 +51,7 @@
         let doubleArray = function(firstArr, secondArr) {
             let firstArray = firstArr;
             let secondArray = secondArr;
-            newArray = firstArray.concat(secondArray);
+            let newArray = firstArray.concat(secondArray);
             shuffle(newArray);
         }
 
@@ -64,20 +69,19 @@
         let checkCard = function() {
 
             let checkCardMatch = temporaryArray.every((val, i, arr) => val.name === arr[0].name);
-            let addPoints = +20;
-            let removePoints = -10;
+            let addPoints = +50;
+            let removePoints = -2;
             checkCardMatch == true ? assignPoints(addPoints, true) : assignPoints(removePoints, false);
         }
 
         let assignPoints = function(assignPoints, stayFlipped) {
             points += assignPoints;
             if(stayFlipped) {
-                console.log('called');
+                removeCounterClick();
             } else {
                 undoFlip();
             }
             document.getElementById('score').innerHTML = points;
-            counter = 0;
             emptyArray();
            
         }
@@ -94,6 +98,7 @@
                 if(memoryCards[i].id == element) {
                 timer = setTimeout(function () {
                     memoryCards[i].classList.remove('hover');
+                    removeCounterClick();
                     }, 2000);
                 }
             }
@@ -104,23 +109,23 @@
         }
             
         let flipCard = function(e) {
-            counterClicks = document.querySelectorAll('.counter-click').length;
-            if(e.target.className === 'memory-card' && counter < 2 && counterClicks < 2) {
-                let cardName = e.target.innerText;
+            let counterClicks = document.querySelectorAll('.counter-clicks').length;
 
+            if(e.target.className === 'memory-card' && counterClicks < 2) {
+                let cardName = e.target.getElementsByTagName('img')[0].src;
                 counter++;
                 getId = e.target.getAttribute('id');
                 e.target.classList.add('hover', 'counter-clicks');
-                removeCounterClick();
+               
                 countFlipCards(cardName, getId);
             }
         }
 
-        let removeCounterClick = function(counterClicks) {
-            console.log(counterClicks);
-            // for(let i = 0; i < counterClicks.length; i++) {
-            //     counterClicks[i];
-            // }
+        let removeCounterClick = function() {
+            let counterClicks = document.querySelectorAll('.counter-clicks');
+            for(let i = 0; i < counterClicks.length; i++) {
+                counterClicks[i].classList.remove('counter-clicks');
+            }
         }
 
         let shuffledArray = function(array) {
@@ -128,7 +133,7 @@
             if(memoryBlock === undefined) return;
 
             for(let i = 0; i < array.length; i++) {
-                memoryBlock += '<div class="memory-card" id="'+ i + '"><div class="front"></div><div class="back">' + array[i] + '</div></div>';
+                memoryBlock += '<div class="memory-card" id="'+ i + '"><div class="front"></div><div class="back"><img src="src/images/' + array[i] + '.png"/></div></div>';
             }       
             checkMemoryGame(memoryGame.childNodes.length, memoryBlock);
         }

@@ -3,6 +3,7 @@ body {
     padding: 0;
     width: 100%;
     overflow-x: hidden;
+    font-weight: bold;
     .score-board {
         position: absolute;
         top: 10px;
@@ -10,14 +11,24 @@ body {
         padding: 20px;
         background-color: black;
         color: white;
+        display: none;
+        &.display-block {
+            display: block;
+        }
+    }
+    .button {
+        border-radius: 10px;
+        padding: 10px 20px;
+        outline: none;
     }
     .memory-card {
-        width: 20%;
+        @media screen and (max-width: 767px) {
+            width: 20%;
+        }
+        justify-content: space-around;
+        width: 15%;
         border: 1px solid black;
-        // float: left;
         display: inline-block;
-        margin-left: 50px;
-        margin-right: 50px;
         height: 100px;
         transition: 0.6s;
 	    transform-style: preserve-3d;
@@ -38,6 +49,8 @@ body {
             left: 0;
         }
         .front {
+            background-image: url('/src/images/nintendo-logo.png');
+            background-position: center center;
             z-index: 2;
         }
         .back {
@@ -45,10 +58,17 @@ body {
             -moz-transform: rotateY(180deg);
             -o-transform: rotateY(180deg);
             transform: rotateY(180deg);
-            background: #f8f8f8;
-        }
-        .front {
-            z-index: 2;
+            background: transparent;
+            padding: 20px;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            img {
+                height: 100%;
+                display: block;
+                margin: 0 auto;
+            }
         }
     }
 }
