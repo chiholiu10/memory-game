@@ -3,6 +3,14 @@ body {
     padding: 0;
     width: 100%;
     overflow-x: hidden;
+    .score-board {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 20px;
+        background-color: black;
+        color: white;
+    }
     .memory-card {
         width: 20%;
         border: 1px solid black;

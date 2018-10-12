@@ -11,6 +11,9 @@
         let temporaryArray = [];
         let points = 0;
         let getId;
+        let counter = 0;
+        let timer;
+        let counterClicks;
 
         this.init = function() {
            addEventListener();
@@ -24,6 +27,7 @@
         let showCards = function() {
             doubleArray(array, array);  
             triggerClick();
+            clearInterval(timer);
         }
         
         let triggerFirstClick = function() {
@@ -60,7 +64,6 @@
         let checkCard = function() {
 
             let checkCardMatch = temporaryArray.every((val, i, arr) => val.name === arr[0].name);
-            console.log(checkCardMatch);
             let addPoints = +20;
             let removePoints = -10;
             checkCardMatch == true ? assignPoints(addPoints, true) : assignPoints(removePoints, false);
@@ -69,11 +72,14 @@
         let assignPoints = function(assignPoints, stayFlipped) {
             points += assignPoints;
             if(stayFlipped) {
-                return;
+                console.log('called');
             } else {
                 undoFlip();
             }
+            document.getElementById('score').innerHTML = points;
+            counter = 0;
             emptyArray();
+           
         }
 
         let undoFlip = function() {
@@ -86,7 +92,7 @@
             let memoryCards = document.querySelectorAll('.memory-card');
             for(let i = 0; i < memoryCards.length; i++) {
                 if(memoryCards[i].id == element) {
-                    setTimeout(function () {
+                timer = setTimeout(function () {
                     memoryCards[i].classList.remove('hover');
                     }, 2000);
                 }
@@ -98,15 +104,25 @@
         }
             
         let flipCard = function(e) {
-            let flippedCards = document.querySelectorAll('.hover').length;
-            if(e.target && e.target.className === 'memory-card' && flippedCards < 2) {
+            counterClicks = document.querySelectorAll('.counter-click').length;
+            if(e.target.className === 'memory-card' && counter < 2 && counterClicks < 2) {
                 let cardName = e.target.innerText;
+
+                counter++;
                 getId = e.target.getAttribute('id');
-                e.target.classList.add('hover');
+                e.target.classList.add('hover', 'counter-clicks');
+                removeCounterClick();
                 countFlipCards(cardName, getId);
             }
         }
-        
+
+        let removeCounterClick = function(counterClicks) {
+            console.log(counterClicks);
+            // for(let i = 0; i < counterClicks.length; i++) {
+            //     counterClicks[i];
+            // }
+        }
+
         let shuffledArray = function(array) {
             let memoryBlock = "";
             if(memoryBlock === undefined) return;
